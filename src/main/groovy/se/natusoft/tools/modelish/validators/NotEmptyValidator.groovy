@@ -1,11 +1,13 @@
 package se.natusoft.tools.modelish.validators
 
+import groovy.transform.CompileStatic
 import se.natusoft.tools.modelish.ModelishException
 import se.natusoft.tools.modelish.ModelishValidator
 
 import java.lang.annotation.Annotation
 import java.lang.reflect.Method
 
+@CompileStatic
 class NotEmptyValidator implements ModelishValidator {
 
     /**

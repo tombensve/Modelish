@@ -177,6 +177,7 @@ class ModelishInvocationHandler implements InvocationHandler {
                         // Clone what can be cloned.
                         for (String key: map.keySet(  )) {
                             Object value = map.get(key)
+
                             if (value instanceof java.lang.Cloneable) {
                                 map[key] = value.clone(  )
                             }
@@ -195,7 +196,8 @@ class ModelishInvocationHandler implements InvocationHandler {
                             map[entry.key] = (Number)entry.value
                         }
                         else {
-                            System.err.println("Modelish: Warning: Did fail to clone: " + entry.value)
+                            System.err.println("Modelish: Warning: Did fail to clone: ${entry.value} !")
+                            System.err.println("This means the copy will have same instance as original!")
                             map[entry.key] = entry.value
                         }
                     }
@@ -218,7 +220,7 @@ class ModelishInvocationHandler implements InvocationHandler {
                 // That this does not print key and does not look like JSON is intentional!
                 // If you want JSON do _toMap() and then use something like Jackson Jr to
                 // convert that to JSON. I think Goovys JSONSlurper handles Maps also.
-                StringBuffer sb = new StringBuffer()
+                StringBuilder sb = new StringBuilder()
                 sb.append "[ "
                 String comma = ""
                 this.values.each {
@@ -318,7 +320,6 @@ class ModelishInvocationHandler implements InvocationHandler {
             copy[ key ] = srcObj
 
         }
-
 
         Class<?>[] interfaces = new Class[1]
         interfaces[ 0 ] = api
