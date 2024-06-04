@@ -1,5 +1,6 @@
 package se.natusoft.tools.modelish.validators
 
+import groovy.transform.CompileStatic
 import se.natusoft.tools.modelish.ModelishException
 import se.natusoft.tools.modelish.ModelishValidator
 import se.natusoft.tools.modelish.annotations.validations.ValidRange
@@ -10,6 +11,7 @@ import java.lang.reflect.Method
 /**
  * Validates the range of numeric values, excluding BigDecimal!
  */
+@CompileStatic
 class ValidRangeValidator implements ModelishValidator {
 
     /**

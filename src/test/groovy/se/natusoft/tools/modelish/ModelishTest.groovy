@@ -434,10 +434,15 @@ class ModelishTest {
                         .name( "Tommy" )
                         .address( "Liljeholmen" )
                         .age( 54 )
-                        ._immutable()
                 )
-                ._immutable()
+                ._recursivelyImmutable(  )
 
+/*
+    WARNING: An illegal reflective access operation has occurred
+    WARNING: Illegal reflective access by org.codehaus.groovy.vmplugin.v9.Java9
+    (file:/Users/tommy/.m2/repository/org/apache/groovy/groovy/4.0.21/groovy-4.0.21.jar) to
+    field java.lang.reflect.Proxy.h
+ */
         Map<String, Object> map = user._toMap()
 
         assert map[ "id" ] == "tbs"
@@ -446,6 +451,7 @@ class ModelishTest {
         assert map[ "userInfo" ][ "name" ] == "Tommy"
         assert map[ "userInfo" ][ "address" ] == "Liljeholmen"
         assert map[ "userInfo" ][ "age" ] as int == 54
+
     }
 
     @Test

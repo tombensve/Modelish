@@ -1,5 +1,6 @@
 package se.natusoft.tools.modelish
 
+import groovy.transform.CompileStatic
 import se.natusoft.tools.modelish.validators.NoNullValidator
 import se.natusoft.tools.modelish.validators.NotEmptyValidator
 import se.natusoft.tools.modelish.validators.ValidRangeValidator
@@ -10,6 +11,7 @@ import java.lang.reflect.Method
 /**
  * Implementations of this can be passed to Modelish.
  */
+@CompileStatic
 interface ModelishValidator {
 
     /**

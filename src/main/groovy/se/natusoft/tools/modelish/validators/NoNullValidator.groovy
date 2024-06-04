@@ -1,5 +1,6 @@
 package se.natusoft.tools.modelish.validators
 
+import groovy.transform.CompileStatic
 import se.natusoft.tools.modelish.ModelishException
 import se.natusoft.tools.modelish.ModelishValidator
 
@@ -9,6 +10,7 @@ import java.lang.reflect.Method
 /**
  * Validates that model value is not null.
  */
+@CompileStatic
 class NoNullValidator implements ModelishValidator {
 
     /**
