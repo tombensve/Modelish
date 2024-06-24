@@ -203,7 +203,7 @@ slightly:
 
     <groupId>se.natusoft.modelish</groupId>
     <artifactId>Modelish</artifactId>
-    <version>3.3.11</version>
+    <version>4.0.11</version>
 
 
 ### 3.3.11
