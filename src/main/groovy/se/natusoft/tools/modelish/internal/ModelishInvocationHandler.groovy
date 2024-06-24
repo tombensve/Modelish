@@ -157,7 +157,7 @@ class ModelishInvocationHandler implements InvocationHandler {
                 break
 
             case "_clone":
-            case "_create":
+            case "_create": // Usage as factory with preset values!
                 result = doClone( proxy.getClass().getInterfaces()[ 0 ], this.values )
                 break
 
@@ -181,6 +181,16 @@ class ModelishInvocationHandler implements InvocationHandler {
                             if (value instanceof java.lang.Cloneable) {
                                 map[key] = value.clone(  )
                             }
+                            else {
+                                // If we fail to clone we cannot do more that return original.
+                                map[key] = value
+
+                                //System.err.println "----------------------------------------------------------------------"
+                                //System.err.println "MODELISH: WARNING: Failed to clone! Returning same object as received!"
+                                //System.err.println "MODELISH: > Object: ${value}"
+                                //System.err.println "NOTE that this does not necessarily mean that something is wrong!"
+                                //System.err.println "----------------------------------------------------------------------"
+                            }
                         }
                     }
                     else {
@@ -196,8 +206,8 @@ class ModelishInvocationHandler implements InvocationHandler {
                             map[entry.key] = (Number)entry.value
                         }
                         else {
-                            System.err.println("Modelish: Warning: Did fail to clone: ${entry.value} !")
-                            System.err.println("This means the copy will have same instance as original!")
+                            //System.err.println("Modelish: Warning: Did fail to clone: ${entry.value} !")
+                            //System.err.println("This means the copy will have same instance as original!")
                             map[entry.key] = entry.value
                         }
                     }
@@ -278,9 +288,9 @@ class ModelishInvocationHandler implements InvocationHandler {
                     if (result instanceof Map<String, Object>) {
 
                         result = doClone( method.returnType, result )
+
                         this.values[calledMethod] = result // Fix so this does not have to be done again!
                     }
-
                 }
                 // Bad model!
                 else {
@@ -324,6 +334,6 @@ class ModelishInvocationHandler implements InvocationHandler {
         Class<?>[] interfaces = new Class[1]
         interfaces[ 0 ] = api
 
-        return Proxy.newProxyInstance( api.getClassLoader(), interfaces, new ModelishInvocationHandler( copy ) )
+        Proxy.newProxyInstance( api.getClassLoader(), interfaces, new ModelishInvocationHandler( copy ) )
     }
 }
