@@ -201,7 +201,7 @@ See [Test](https://github.com/tombensve/Modelish/blob/main/src/test/groovy/se/na
 No real change but since this have been moved from NS-Toolbox to own project the maven GAV have changed
 slightly:
 
-    <groupId>se.natusoft.modelish</groupId>
+    <groupId>se.natusoft</groupId>
     <artifactId>Modelish</artifactId>
     <version>4.0.11</version>
 
