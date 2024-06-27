@@ -442,6 +442,8 @@ class ModelishTest {
     WARNING: Illegal reflective access by org.codehaus.groovy.vmplugin.v9.Java9
     (file:/Users/tommy/.m2/repository/org/apache/groovy/groovy/4.0.21/groovy-4.0.21.jar) to
     field java.lang.reflect.Proxy.h
+
+    https://issues.apache.org/jira/browse/GROOVY-11428
  */
         Map<String, Object> map = user._toMap()
 

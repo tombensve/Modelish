@@ -163,6 +163,7 @@ class ModelishInvocationHandler implements InvocationHandler {
 
             // Create a new Map and copy values. If value is another model then call _toMap() on that model.
             case "_toMap":
+
                 Map<String, Object> map = [:]
                 this.values.each { Map.Entry<String, Object> entry ->
 
@@ -206,14 +207,18 @@ class ModelishInvocationHandler implements InvocationHandler {
                             map[entry.key] = (Number)entry.value
                         }
                         else {
-                            //System.err.println("Modelish: Warning: Did fail to clone: ${entry.value} !")
-                            //System.err.println("This means the copy will have same instance as original!")
+                            System.err.println("Modelish: Warning: Did fail to clone: ${entry.value} !")
+                            System.err.println("This means the copy will have same instance as original!")
                             map[entry.key] = entry.value
                         }
                     }
                 }
 
-                result = map
+                // Probably not necessary!
+                LinkedHashMap<String, Object> resMap = [:]
+                resMap.putAll( map )
+
+                result = resMap
                 break
 
             // Completely internal call to overwrite values map with provided.
