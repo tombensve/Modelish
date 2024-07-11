@@ -265,9 +265,10 @@ class ModelishTest {
     // Giving it a more builder feel
     //
 
-    interface SeagullModel<T> extends Cloneable<T> {}
+    // Put data common to all models if any here.
+    interface ProjectModel<T> extends Cloneable<T> {}
 
-    interface Address extends SeagullModel<Address> {
+    interface Address extends ProjectModel<Address> {
 
         String getStreet()
 
@@ -293,7 +294,6 @@ class ModelishTest {
                 .streetNumber( 44 )
                 .postalAddress( "Stockholm" )
                 ._immutable()
-
 
         // Note that these resulting objects are read only, only having getters.
         // But yes, the instance can still be cast to AddressBuilder also, but any
@@ -412,18 +412,6 @@ class ModelishTest {
      * and I will not mess it up due to this little "issue".
      */
 
-    /*
-     * Note that the below test will produce the following warning:
-     *
-     * WARNING: An illegal reflective access operation has occurred
-     * WARNING: Illegal reflective access by org.codehaus.groovy.vmplugin.v9.Java9 (file:/Users/tommy/.m2/repository/org/apache/groovy/groovy/4.0.18/groovy-4.0.18.jar) to field java.lang.reflect.Proxy.h
-     * WARNING: Please consider reporting this to the maintainers of org.codehaus.groovy.vmplugin.v9.Java9
-     * WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
-     * WARNING: All illegal access operations will be denied in a future release
-     *
-     * ALSO NOTE that this warning only happens when run within IDEA! When run during build with "mvnw clean install"
-     * in terminal no such warning is produced!
-     */
     @Test
     void verifyGetValueMap() {
 
@@ -437,14 +425,6 @@ class ModelishTest {
                 )
                 ._recursivelyImmutable(  )
 
-/*
-    WARNING: An illegal reflective access operation has occurred
-    WARNING: Illegal reflective access by org.codehaus.groovy.vmplugin.v9.Java9
-    (file:/Users/tommy/.m2/repository/org/apache/groovy/groovy/4.0.21/groovy-4.0.21.jar) to
-    field java.lang.reflect.Proxy.h
-
-    https://issues.apache.org/jira/browse/GROOVY-11428
- */
         Map<String, Object> map = user._toMap()
 
         assert map[ "id" ] == "tbs"

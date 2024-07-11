@@ -39,7 +39,6 @@ import se.natusoft.tools.modelish.Cloneable
 import se.natusoft.tools.modelish.ModelishException
 import se.natusoft.tools.modelish.Model
 import se.natusoft.tools.modelish.ModelishValidator
-import se.natusoft.tools.modelish.annotations.validations.ValidRange
 import java.lang.annotation.Annotation
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
@@ -169,11 +168,9 @@ class ModelishInvocationHandler implements InvocationHandler {
 
                     if ( entry.value instanceof Model ) { // A sub model!
 
-                        // Using Groovy meta properties.
-                        PropertyValue propertyValue = entry.value.metaPropertyValues[0] as PropertyValue
-                        ModelishInvocationHandler mih = propertyValue.value as ModelishInvocationHandler
-
-                        map[entry.key] = mih.values
+                        // I started with some incorrect recursive field by field copy here !!!
+                        // So why the hell didn't I start with this instead ??? ...
+                        map[entry.key] = ((Model)entry.value)._toMap().clone()
 
                         // Clone what can be cloned.
                         for (String key: map.keySet(  )) {
@@ -186,11 +183,13 @@ class ModelishInvocationHandler implements InvocationHandler {
                                 // If we fail to clone we cannot do more that return original.
                                 map[key] = value
 
-                                //System.err.println "----------------------------------------------------------------------"
-                                //System.err.println "MODELISH: WARNING: Failed to clone! Returning same object as received!"
-                                //System.err.println "MODELISH: > Object: ${value}"
-                                //System.err.println "NOTE that this does not necessarily mean that something is wrong!"
-                                //System.err.println "----------------------------------------------------------------------"
+                                if (System.properties.get("modelish-log-warnings") != null) {
+                                    System.err.println "----------------------------------------------------------------------"
+                                    System.err.println "MODELISH: WARNING: Failed to clone! Returning same object as received!"
+                                    System.err.println "MODELISH: > Object: ${value}"
+                                    System.err.println "NOTE that this does not necessarily mean that something is wrong!"
+                                    System.err.println "----------------------------------------------------------------------"
+                                }
                             }
                         }
                     }
@@ -254,7 +253,6 @@ class ModelishInvocationHandler implements InvocationHandler {
                 break
 
             default:
-
                 // Validation of bad model interface. Can only be 0 or 1 argument.
                 if ( args != null && args.length > 1 ) {
                     throw new ModelishException(
@@ -342,3 +340,4 @@ class ModelishInvocationHandler implements InvocationHandler {
         Proxy.newProxyInstance( api.getClassLoader(), interfaces, new ModelishInvocationHandler( copy ) )
     }
 }
+
