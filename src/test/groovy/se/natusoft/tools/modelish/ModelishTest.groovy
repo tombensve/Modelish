@@ -295,6 +295,7 @@ class ModelishTest {
                 .postalAddress( "Stockholm" )
                 ._immutable()
 
+
         // Note that these resulting objects are read only, only having getters.
         // But yes, the instance can still be cast to AddressBuilder also, but any
         // try to modify will fail due to the ending _lock() call.
