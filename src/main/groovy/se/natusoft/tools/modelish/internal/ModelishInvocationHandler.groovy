@@ -341,8 +341,3 @@ class ModelishInvocationHandler implements InvocationHandler {
     }
 }
 
-
-hInvocationHandler( copy ) )
-    }
-}
-
