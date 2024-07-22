@@ -68,7 +68,7 @@ Note that
             .name("Tommy Svensson")
             .age(53)
             .address("Stockholm")
-            ._immutable();
+            ._immutable()
 
 ```
 
@@ -79,7 +79,8 @@ Note that
             .name("Tommy Svensson")
             .age(53)
             .address("Stockholm")
-            ._lock()
+            ._lock() // _lock() and _imutable() are syonyms! They do exactly the same thing. Pick what
+                     // feels best for the situation. 
 
 ```
 
