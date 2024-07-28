@@ -6,7 +6,7 @@
     <groupId>se.natusoft</groupId>
     <artifactId>Modelish</artifactId>
     <!-- major.minor.bytecode  -->
-    <version>4.2.11</version>
+    <version>4.2.0-BC-11</version>
 
     <packaging>jar</packaging>
 
