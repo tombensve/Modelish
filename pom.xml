@@ -3,10 +3,38 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!--
+        This is the only way I've found to import a reusable common
+        setup for building groovy code.
+
+        There should be an import functionality to make this part
+        of the build without treating it as a parent!
+
+        I want the possibility to "import" more than one config like this,
+        and publish them as reusable build configurations.
+
+        What I've done here is ugly, but the only thing that works, but only
+        for one config!
+
+        I've tried to use:
+
+            <type>pom</type>
+            <scope>import</scope>
+
+        but that fails completely!
+    -->
+    <parent>
+        <groupId>com.github.tombensve</groupId>
+        <artifactId>groovy-build</artifactId>
+        <version>1.0.11</version>
+    </parent>
+
+    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
     <groupId>se.natusoft</groupId>
     <artifactId>Modelish</artifactId>
     <!-- major.minor.bytecode  -->
-    <version>4.2.0-BC-11</version>
+    <version>4.3.11</version>
 
     <packaging>jar</packaging>
 
@@ -42,11 +70,6 @@
     <properties>
 
         <!--
-            Version of Groovy to use.
-        -->
-        <groovy.version>4.0.21</groovy.version>
-
-        <!--
             Version of byte-code to produce.
         -->
         <bytecode.version>11</bytecode.version>
@@ -57,14 +80,7 @@
 
     <dependencies>
 
-        <dependency>
-            <groupId>org.apache.groovy</groupId>
-            <artifactId>groovy</artifactId>
-            <version>${groovy.version}</version>
-        </dependency>
-
         <!-- Test -->
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -85,17 +101,18 @@
         <url>scm:https://github.com/tombensve/Modelsih.git</url>
     </scm>
 
-
     <distributionManagement>
+
         <repository>
             <id>repsy</id>
             <name>repsy</name>
             <url>https://repo.repsy.io/mvn/tombensve/natusoft-os</url>
         </repository>
+
     </distributionManagement>
 
-
     <repositories>
+
         <repository>
             <id>repsy</id>
             <name>My Private Maven Repository on Repsy</name>
@@ -122,43 +139,10 @@
         <testSourceDirectory>src/test/groovy</testSourceDirectory>
 
         <extensions>
-            <!-- Not entirely sure if this is needed for pushing to Repsy.io! -->
-            <!--
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ftp</artifactId>
-                <version>2.3</version>
-            </extension>
-            -->
         </extensions>
 
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.12.1</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-install-plugin</artifactId>
-                    <version>3.1.1</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>3.3.0</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.6.0</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>se.natusoft.tools.codelicmgr</groupId>
-                    <artifactId>CodeLicenseManager-maven-plugin</artifactId>
-                    <version>2.2.6</version>
-                </plugin>
 
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -166,218 +150,13 @@
                     <version>1.8</version>
                 </plugin>
 
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.2.3</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.codehaus.gmavenplus</groupId>
-                    <artifactId>gmavenplus-plugin</artifactId>
-                    <version>3.0.2</version>
-                </plugin>
-
             </plugins>
         </pluginManagement>
 
         <plugins>
 
-            <plugin>
-                <groupId>org.codehaus.gmavenplus</groupId>
-                <artifactId>gmavenplus-plugin</artifactId>
-
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.groovy</groupId>
-                        <artifactId>groovy</artifactId>
-                        <version>${groovy.version}</version>
-                    </dependency>
-                </dependencies>
-
-                <configuration>
-                    <targetBytecode>${bytecode.version}</targetBytecode>
-                </configuration>
-
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>addSources</goal>
-                            <goal>addTestSources</goal>
-                            <goal>compile</goal>
-                            <goal>compileTests</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-
-            <!--
-                 Define project assemblies.
-            -->
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-            </plugin>
-
-            <!--
-                Force checksums when installing to repository.
-                I suspect that this might be unnecessary since I think
-                deploy creates checksums anyhow when deploying to external
-                repository.
-            -->
-            <plugin>
-                <artifactId>maven-install-plugin</artifactId>
-                <configuration>
-                    <!--createChecksum>true</createChecksum-->
-                </configuration>
-            </plugin>
-
-            <!--
-                Copy relevant license files to target on install.
-            -->
-            <plugin>
-                <groupId>se.natusoft.tools.codelicmgr</groupId>
-                <artifactId>CodeLicenseManager-maven-plugin</artifactId>
-
-                <executions>
-                    <execution>
-                        <id>install-licence-info</id>
-                        <goals>
-                            <goal>install</goal>
-                        </goals>
-                        <phase>install</phase>
-                        <configuration>
-
-                            <installOptions>
-                                <verbose>true</verbose>
-                                <licenseDir>target/license</licenseDir>
-                                <thirdpartyLicenseDir>target/license/thirdparty</thirdpartyLicenseDir>
-                            </installOptions>
-
-                            <!--
-                                Here we add those that are not auto resolved.
-                            -->
-                            <thirdpartyLicenses>
-                            </thirdpartyLicenses>
-
-                            <createLicensesMarkdown>true</createLicensesMarkdown>
-                            <markdownTargetSubdir>lics</markdownTargetSubdir>
-                            <markdownLinkPrefix>https://github.com/tombensve/${project.artifactId}/blob/master/lics/
-                            </markdownLinkPrefix>
-
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!--
-                Package sources.
-            -->
-            <plugin>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-            </plugin>
         </plugins>
 
     </build>
 
-    <!--
-        Profiles
-    -->
-    <profiles>
-        <profile>
-            <id>apply-licence-info</id>
-            <build>
-                <plugins>
-                    <plugin>
-
-                        <groupId>se.natusoft.tools.codelicmgr</groupId>
-                        <artifactId>CodeLicenseManager-maven-plugin</artifactId>
-                        <version>2.2.6</version>
-
-                        <dependencies>
-                            <dependency>
-                                <groupId>se.natusoft.tools.codelicmgr</groupId>
-                                <artifactId>CodeLicenseManager-licenses-common-opensource</artifactId>
-                                <version>2.2.6</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>se.natusoft.tools.codelicmgr</groupId>
-                                <artifactId>CodeLicenseManager-source-updater-slashstar-comment</artifactId>
-                                <version>2.2.6</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>se.natusoft.tools.codelicmgr</groupId>
-                                <artifactId>CodeLicenseManager-source-updater-html-xml</artifactId>
-                                <version>2.2.6</version>
-                            </dependency>
-                        </dependencies>
-
-                        <configuration>
-                            <project>
-                                <codeVersion>${project.version}</codeVersion>
-                            </project>
-                            <!-- All options are optional. -->
-                            <codeOptions>
-                                <verbose>true</verbose>
-                                <!-- If not set uses extension on source file to resolve. -->
-                                <codeLanguage><!-- by source extension. -->
-                                    Groovy
-                                </codeLanguage>
-                                <!-- If true updates the license information in source code. -->
-                                <updateLicenseInfo>true</updateLicenseInfo>
-                                <!-- If true updates the copyright information in source code. -->
-                                <updateCopyright>true</updateCopyright>
-                                <!-- If true updates the project information in source code. -->
-                                <updateProject>true</updateProject>
-                                <!-- If true will add authors information to source files that does not have it. This is not always implemented! -->
-                                <addAuthorsBlock>true</addAuthorsBlock>
-                                <!-- The directories to scan for source code to update with project & license information. -->
-                                <sourceCodeDirs>
-                                    src/main/groovy/**/.*.groovy,src/test/groovy/**/.*.groovy,src/assembly/**/.*.xml
-                                </sourceCodeDirs>
-
-                            </codeOptions>
-
-                            <userData>
-                                <!--name></name>
-                                <value></value-->
-                            </userData>
-
-                        </configuration>
-
-                        <executions>
-                            <execution>
-                                <id>apply-licence-info</id>
-                                <goals>
-                                    <goal>apply</goal>
-                                </goals>
-                                <phase>generate-sources</phase>
-                            </execution>
-                        </executions>
-
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
 </project>
-
